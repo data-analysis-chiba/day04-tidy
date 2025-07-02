@@ -182,19 +182,19 @@ During data analysis, we often need to perform several intermediate steps. It is
 not convenient to save the output of each since you have to think of names for
 each output object, and may not even use them for anything later. A better way
 to do this is using something called the "pipe". The pipe is written like this:
-`%>%` (newer versions of R also let you write it like this: `|>`).
+`|>` (some packages also write it like this: `%>%`).
 
 The pipe takes the output from one function and passes it to the input of the
 next function. You can think of it as saying "and then":
   
 - Do this **and then** do this, **and then** do this...
-- Do this **`%>%`** do this, **`%>%`** do this...
+- Do this **`|>`** do this, **`|>`** do this...
 
 We can even use the pipe just with one function. Read the following as "start
 with `gapminder` **and then** select only year, country, and population":
 
 ```{r}
-gapminder %>% select(year, country, pop)
+gapminder |> select(year, country, pop)
 ```
 
 This becomes very useful when we want to do **multiple steps**. Read this as
@@ -202,15 +202,17 @@ This becomes very useful when we want to do **multiple steps**. Read this as
 **and then** arrange by year":
 
 ```{r}
-gapminder %>% select(year, country, pop) %>% arrange(year)
+gapminder |>
+  select(year, country, pop) |>
+  arrange(year)
 ```
 
 We can make it easier to read by putting each step on its own line (the result
 is exactly the same, since R ignores spaces and line breaks):
 
 ```{r}
-gapminder %>%
-  select(year, country, pop) %>%
+gapminder |>
+  select(year, country, pop) |>
   arrange(year)
 ```
 
@@ -224,7 +226,7 @@ Use the `filter()` function to only keep rows that **meet a certain condition**.
 For example, let's only keep the data in Europe:
 
 ```{r}
-gapminder %>% filter(continent == "Europe")
+gapminder |> filter(continent == "Europe")
 ```
 
 ## Modify data with `mutate()`
@@ -232,13 +234,13 @@ gapminder %>% filter(continent == "Europe")
 For example, we could change the units of population to millions of people:
 
 ```{r}
-gapminder %>% mutate(pop = pop/1000000)
+gapminder |> mutate(pop = pop / 1000000)
 ```
 
 If we provide a new column name, that column will be added
 
 ```{r}
-gapminder %>% mutate(pop_mil = pop/1000000)
+gapminder |> mutate(pop_mil = pop / 1000000)
 ```
 
 ## Calculate summary statistics with `summarize()`
@@ -246,13 +248,13 @@ gapminder %>% mutate(pop_mil = pop/1000000)
 For example, let's calculate the overall mean population:
 
 ```{r}
-gapminder %>% summarize(mean_pop = mean(pop))
+gapminder |> summarize(mean_pop = mean(pop))
 ```
 
 As another example, let's calculate the total population over all the data:
 
 ```{r}
-gapminder %>% summarize(total_pop = sum(pop))
+gapminder |> summarize(total_pop = sum(pop))
 ```
 
 ## Use `group_by()` to do calculations per group
@@ -261,14 +263,14 @@ However, it is often more useful to calculate such summary statistics for
 **particular groups**. To do this, first specify the groups with `group_by()`:
 
 ```{r}
-gapminder %>% group_by(continent)
+gapminder |> group_by(continent)
 ```
 
 Next, use `summarize()` to calculate the summary statistic:
 
 ```{r}
-gapminder %>%
-  group_by(continent) %>%
+gapminder |>
+  group_by(continent) |>
   summarize(mean_pop = mean(pop))
 ```
 
@@ -285,7 +287,7 @@ Here is a list of the data-wrangling commands we have learned so far:
 - Summarize data with `summarize()`
 - Group data with `group_by()`
 
-By combining these functions, each of which is fairly simple, with the pipe (`%>%`), you can construct sophisticated data analysis pipelines.
+By combining these functions, each of which is fairly simple, with the pipe (`|>`), you can construct sophisticated data analysis pipelines.
 
 ## Submitting the homework
 

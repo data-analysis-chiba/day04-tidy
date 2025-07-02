@@ -1,6 +1,6 @@
-Reproducible Data Analysis Day 4: Data loading and tidying with
+# Reproducible Data Analysis Day 4: Data loading and tidying with
 tidyverse
-================
+
 
 ### Learning Objectives
 
@@ -62,13 +62,13 @@ need to load it with the `library()` function, like this:
 library(tidyverse)
 ```
 
-    ── Attaching core tidyverse packages ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
-    ✔ dplyr     1.1.2     ✔ readr     2.1.4
-    ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
-    ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-    ✔ purrr     1.0.1     
-    ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ✔ dplyr     1.1.4     ✔ readr     2.1.5
+    ✔ forcats   1.0.0     ✔ stringr   1.5.1
+    ✔ ggplot2   3.5.2     ✔ tibble    3.3.0
+    ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+    ✔ purrr     1.0.4     
+    ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
     ✖ dplyr::filter() masks stats::filter()
     ✖ dplyr::lag()    masks stats::lag()
     ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
@@ -98,7 +98,7 @@ gapminder <- read_csv("data_raw/gapminder.csv")
 ```
 
     Rows: 1704 Columns: 6
-    ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    ── Column specification ────────────────────────────────────────────────────────
     Delimiter: ","
     chr (2): country, continent
     dbl (4): year, lifeExp, pop, gdpPercap
@@ -298,21 +298,21 @@ During data analysis, we often need to perform several intermediate
 steps. It is not convenient to save the output of each since you have to
 think of names for each output object, and may not even use them for
 anything later. A better way to do this is using something called the
-“pipe”. The pipe is written like this: `%>%` (newer versions of R also
-let you write it like this: `|>`).
+“pipe”. The pipe is written like this: `|>` (some packages also write it
+like this: `%>%`).
 
 The pipe takes the output from one function and passes it to the input
 of the next function. You can think of it as saying “and then”:
 
 - Do this **and then** do this, **and then** do this…
-- Do this **`%>%`** do this, **`%>%`** do this…
+- Do this **`|>`** do this, **`|>`** do this…
 
 We can even use the pipe just with one function. Read the following as
 “start with `gapminder` **and then** select only year, country, and
 population”:
 
 ``` r
-gapminder %>% select(year, country, pop)
+gapminder |> select(year, country, pop)
 ```
 
     # A tibble: 1,704 × 3
@@ -335,7 +335,9 @@ this as “start with `gapminder`, **and then** select only year, country,
 and population, **and then** arrange by year”:
 
 ``` r
-gapminder %>% select(year, country, pop) %>% arrange(year)
+gapminder |>
+  select(year, country, pop) |>
+  arrange(year)
 ```
 
     # A tibble: 1,704 × 3
@@ -357,8 +359,8 @@ We can make it easier to read by putting each step on its own line (the
 result is exactly the same, since R ignores spaces and line breaks):
 
 ``` r
-gapminder %>%
-  select(year, country, pop) %>%
+gapminder |>
+  select(year, country, pop) |>
   arrange(year)
 ```
 
@@ -387,7 +389,7 @@ Use the `filter()` function to only keep rows that **meet a certain
 condition**. For example, let’s only keep the data in Europe:
 
 ``` r
-gapminder %>% filter(continent == "Europe")
+gapminder |> filter(continent == "Europe")
 ```
 
     # A tibble: 360 × 6
@@ -411,7 +413,7 @@ For example, we could change the units of population to millions of
 people:
 
 ``` r
-gapminder %>% mutate(pop = pop/1000000)
+gapminder |> mutate(pop = pop / 1000000)
 ```
 
     # A tibble: 1,704 × 6
@@ -432,7 +434,7 @@ gapminder %>% mutate(pop = pop/1000000)
 If we provide a new column name, that column will be added
 
 ``` r
-gapminder %>% mutate(pop_mil = pop/1000000)
+gapminder |> mutate(pop_mil = pop / 1000000)
 ```
 
     # A tibble: 1,704 × 7
@@ -455,7 +457,7 @@ gapminder %>% mutate(pop_mil = pop/1000000)
 For example, let’s calculate the overall mean population:
 
 ``` r
-gapminder %>% summarize(mean_pop = mean(pop))
+gapminder |> summarize(mean_pop = mean(pop))
 ```
 
     # A tibble: 1 × 1
@@ -467,7 +469,7 @@ As another example, let’s calculate the total population over all the
 data:
 
 ``` r
-gapminder %>% summarize(total_pop = sum(pop))
+gapminder |> summarize(total_pop = sum(pop))
 ```
 
     # A tibble: 1 × 1
@@ -482,7 +484,7 @@ for **particular groups**. To do this, first specify the groups with
 `group_by()`:
 
 ``` r
-gapminder %>% group_by(continent)
+gapminder |> group_by(continent)
 ```
 
     # A tibble: 1,704 × 6
@@ -504,8 +506,8 @@ gapminder %>% group_by(continent)
 Next, use `summarize()` to calculate the summary statistic:
 
 ``` r
-gapminder %>%
-  group_by(continent) %>%
+gapminder |>
+  group_by(continent) |>
   summarize(mean_pop = mean(pop))
 ```
 
@@ -536,7 +538,7 @@ Here is a list of the data-wrangling commands we have learned so far:
 - Group data with `group_by()`
 
 By combining these functions, each of which is fairly simple, with the
-pipe (`%>%`), you can construct sophisticated data analysis pipelines.
+pipe (`|>`), you can construct sophisticated data analysis pipelines.
 
 ## Submitting the homework
 
@@ -549,11 +551,6 @@ Next, clone the remote repo to your local machine. Then, edit the file
 without errors. Once you have done so, commit your changes and push to
 the remote. Don’t forget to push! If you don’t push, your work will not
 be submitted.
-
-Finally, go to Moodle and submit your assignment there by clicking
-“提出物をアッ プロード・入力する” and entering the URL of your repo. For
-this assignment, mine looks like this:
-`https://github.com/data-analysis-chiba-2023/day04-tidy-joelnitta`
 
 Be sure to do this BY THE DEADLINE, or your work will not be counted.
 
