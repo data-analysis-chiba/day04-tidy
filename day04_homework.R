@@ -2,6 +2,8 @@
 #
 # Name:
 
+# For this week's homework, the answer to each question should be a dataframe
+# (tibble)
 
 # 1. Load the "gapminder" dataset and save it to an object called gapminder
 #
