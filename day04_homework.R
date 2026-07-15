@@ -20,7 +20,7 @@
 #    this. Save the result to answer_3
 
 
-# 4. Answer question 4 again, but this time USE the pipe (|>). Save the result
+# 4. Answer question 3 again, but this time USE the pipe (|>). Save the result
 #    to answer_4
 
 
